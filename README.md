@@ -6,6 +6,10 @@ Using to add data to the database
 
 - Hydroeco-pigments / hydro-data / public_html / add.php
 
+Using to obtain the station
+
+- Hydroeco-pigments / hydro-data / public_html / getStation.php
+
 Using to obtain the sample number
 
 - Hydroeco-pigments / hydro-data / public_html / getSerialNumb.php

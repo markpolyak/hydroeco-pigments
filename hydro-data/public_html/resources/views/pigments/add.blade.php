@@ -38,8 +38,20 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                                             <div class="col-md-4">
 
                                                 <div class="form-group">
-                                                    <label>Акваторий</label>
-                                                    <select class="selectArea form-control"></select>
+                                                    <label>Акваторий</label>													
+													<?php													
+                                                    $query = pg_query($cnn, "SELECT * FROM water_area");
+													?>
+                                                    <select class="selectArea form-control">                          
+                                                    <?php
+                                                    while($row = pg_fetch_array($query))
+                                                    {
+                                                    ?>
+                                                    <option value="<?php echo $row['id_water_area']; ?>"><?php echo $row['name']; ?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                    </select>
 												</div>
 												
 												<div class="form-group">
@@ -198,26 +210,38 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                                     </div>
                                     <div class="ibox-content">
                                         <div class="row">
-                                            <div class="col-md-4">
-											
-                                                <div class="form-group">
+                                            <div class="col-md-4">									
+												
+												<div class="form-group">
                                                     <label class="font-normal">Дата отбора пробы</label>
 													<div id="reportrange" class="form-control">
 														<i class="fa fa-calendar"></i>
-														<span></span> <b class="glyphicon glyphicon-calendar"></b>
+														<span id="dateText"></span> <b class="glyphicon glyphicon-calendar"></b>
 													</div>
 													<a href="#" id="allTime">За всё время</a>
                                                 </div>
 												
                                                 <div class="form-group">
-                                                    <label>Акваторий</label>
-                                                    <select class="selectAreaChoice form-control"></select>
+                                                    <label>Акваторий</label>													
+													<?php													
+                                                    $query = pg_query($cnn, "SELECT * FROM water_area");
+													?>
+                                                    <select class="selectAreaChoice form-control">                          
+                                                    <?php
+                                                    while($row = pg_fetch_array($query))
+                                                    {
+                                                    ?>
+                                                    <option value="<?php echo $row['id_water_area']; ?>"><?php echo $row['name']; ?></option>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                    </select>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label>Станция</label>
                                                     <select class="selectStationChoice form-control"></select>
-                                                </div>	
+                                                </div>
 												
 												<div class="form-group">
                                                     <label>Номер пробы</label>
@@ -387,120 +411,11 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
     <script>
         $(document).ready(function(){
             $('#pgInterfaceTwo').hide();
-            var areas = ["","Невская губа","Восточная часть Финского залива (ВЧФЗ)","Курортная зона", "Район захоронения грунтов в Невской губе", "Район захоронения грунтов в ВЧФЗ", "Очистные сооружения на о. Белом", "Северные очистные сооружения"];
-
-            var stations = [{"values":[
-                {"key":1,"value":"5"},
-                {"key":2,"value":"30"},
-                {"key":3,"value":"25"},
-                {"key":4,"value":"6"},
-                {"key":5,"value":"7"},
-                {"key":6,"value":"9"},
-                {"key":7,"value":"10"},
-                {"key":8,"value":"11"},
-                {"key":9,"value":"11а"},
-                {"key":10,"value":"14"},
-                {"key":11,"value":"14а"},
-                {"key":12,"value":"12"},
-                {"key":13,"value":"13"},
-                {"key":14,"value":"39"},
-                {"key":15,"value":"42"},
-                {"key":16,"value":"15"},
-                {"key":17,"value":"16"},
-                {"key":18,"value":"17"},
-                {"key":19,"value":"17а"},
-                {"key":20,"value":"1"},
-                {"key":21,"value":"2"},
-                {"key":22,"value":"12а"}]},
-                {"values":[
-                    {"key":30,"value":"19"},
-                    {"key":31,"value":"20"},
-                    {"key":32,"value":"21"},
-                    {"key":33,"value":"22"},
-                    {"key":34,"value":"24"},
-                    {"key":35,"value":"26"},
-                    {"key":36,"value":"21(K2"},
-                    {"key":37,"value":"23"},
-                    {"key":38,"value":"1"},
-                    {"key":39,"value":"2"},
-                    {"key":40,"value":"3"},
-                    {"key":41,"value":"4"},
-                    {"key":42,"value":"А"},
-                    {"key":43,"value":"14"},
-                    {"key":44,"value":"13"},
-                    {"key":45,"value":"12"},
-                    {"key":46,"value":"11"},
-                    {"key":47,"value":"18л"},
-                    {"key":48,"value":"6л"},
-                    {"key":49,"value":"6к"},
-                    {"key":50,"value":"3к"},
-                    {"key":72,"value":"25"},
-                    {"key":73,"value":"27"},
-                    {"key":74,"value":"29"},
-                    {"key":75,"value":"28"},    
-                ]},
-                {"values":[
-                    {"key":82,"value":"19к"},
-                    {"key":83,"value":"20к"},
-                    {"key":84,"value":"К1"},
-                    {"key":85,"value":"Г1"},
-                    {"key":86,"value":"Г2"},
-                ]},
-                {"values":[
-                    {"key":23,"value":"фоновая 1"},
-                    {"key":24,"value":"фоновая 2"},
-                    {"key":25,"value":"K5"},
-                    {"key":26,"value":"K6"},
-                    {"key":27,"value":"K7"},
-                    {"key":28,"value":"K8"},
-                    {"key":29,"value":"K9"},
-                    {"key":57,"value":"ф1"},
-                    {"key":58,"value":"Д1"},
-                    {"key":59,"value":"Д2"},
-                ]},
-                {"values":[
-                    {"key":51,"value":"К1"},
-                    {"key":52,"value":"К2"},
-                    {"key":53,"value":"К3"},
-                    {"key":54,"value":"К4"},
-                    {"key":55,"value":"21(К2)"},
-                    {"key":56,"value":"К5"},
-                    {"key":76,"value":"ф2"},
-                    {"key":77,"value":"ф3"},
-                    {"key":78,"value":"Д3"},
-                    {"key":79,"value":"Д4"},
-                    {"key":80,"value":"Д5"},
-                    {"key":81,"value":"Д6"},
-                ]},
-                {"values":[
-                    {"key":60,"value":"б2"},
-                    {"key":61,"value":"Б1-I"},
-                    {"key":62,"value":"Б1-II"},
-                    {"key":63,"value":"Б1-III"},
-                    {"key":64,"value":"Б3-II"},
-                    {"key":65,"value":"Б3-III"},
-                    {"key":87,"value":"Б1'"},
-                    {"key":88,"value":"Б3''"},
-                    {"key":89,"value":"Б3'''"},
-                    ]},
-                {"values":[
-                    {"key":66,"value":"С1'"},
-                    {"key":67,"value":"С2'"},
-                    {"key":68,"value":"С3'"},
-                    {"key":69,"value":"С1'''"},
-                    {"key":70,"value":"С2'''"},
-                    {"key":71,"value":"С3'''"},
-                    {"key":90,"value":"С2''"},
-                    ]},
-            ];
 			
-			var selectedAreas = [];
             var selectedStations = [];
             var startDate = '';
             var endDate = '';
-			
-            $('.footable').footable();
-            $('.footable2').footable();
+			var selectArea = '';
 			
             $('#pigmentInterface').click(function () {
                 if($('#pigmentInterface')[0].checked)
@@ -514,40 +429,52 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                     $('#pgInterfaceTwo').slideToggle();
                 }
             });
-
-            $.each(areas, function(index, name) {
-                $('.selectArea').append($("<option></option>").attr("value", index).text(name));
-				$('.selectAreaChoice').append($("<option></option>").attr("value", index).text(name));
-            });
 						
-            $('.selectArea').change(function(){
-				var selectedIndex = $(".selectArea")[0].selectedIndex;
-				if (selectedIndex <= 0)
-                    return;
-
-                $('.selectStation').empty(); 
-
-                $.each(stations[selectedIndex-1].values, function(stationKey, station){
-                    $('.selectStation')
-                            .append($("<option></option>")
-                                    .attr("value", station.key)
-                                    .text(areas[selectedIndex] + ":" + station.value));
-				});
+            $('.selectArea').change(function(){			
+                selectArea = $('.selectArea').val();
+                var result = selectArea;
+                if (result != ""){
+                    $.ajax({
+                        dataType: 'json',
+                        url: 'getStation.php?area=' + selectArea,
+                        success: function(data){
+						$('.selectStation').empty();
+							$(data).each(function(index, station){
+								$('.selectStation')
+									.append($("<option></option>")
+											.attr("value", station.id_station)
+												.text(station.name));
+							})
+                        },
+                        error: function(e){
+                            alert(e.responseText);
+                        }
+                    });
+                }
             });
 			
 			$('.selectAreaChoice').change(function(){
-				var selectedIndexChoice = $(".selectAreaChoice")[0].selectedIndex;
-				if (selectedIndexChoice <= 0)
-                    return;
+				selectArea = $('.selectAreaChoice').val();
 
-                $('.selectStationChoice').empty(); 
-
-                $.each(stations[selectedIndexChoice-1].values, function(stationKey, station){
-                    $('.selectStationChoice')
-                            .append($("<option></option>")
-                                    .attr("value", station.key)
-                                    .text(areas[selectedIndexChoice] + ":" + station.value));
-				});
+                var result = selectArea;
+                if (result != ""){
+                    $.ajax({
+                        dataType: 'json',
+                        url: 'getStation.php?area=' + selectArea,
+                        success: function(data){
+						$('.selectStationChoice').empty();
+							$(data).each(function(index, station){
+								$('.selectStationChoice')
+									.append($("<option></option>")
+											.attr("value", station.id_station)
+												.text(station.name));
+							})
+                        },
+                        error: function(e){
+                            alert(e.responseText);
+                        }
+                    });
+                }
             });
 
 			$('button.addsample').click(function(){
@@ -716,36 +643,39 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                 $(".selectStationChoice option:selected").each(function(){selectedStations.push($(this).attr("value"));});
                 startDate = $('#reportrange').data('daterangepicker').startDate.format("YYYY-MM-DD");
                 endDate = $('#reportrange').data('daterangepicker').endDate.format("YYYY-MM-DD");
-
                 var result = selectedStations;
-                if (result != ""){
-                    $.ajax({
-                        dataType: 'json',
-                        url: 'getSerialNumb.php?station=' + result + '&start=' + startDate + '&end=' + endDate,
-                        success: function(data){
-						$('.selectNumber').empty();
-							$(data).each(function(index, sample){
-								$('.selectNumber')
-									.append($("<option></option>")
-											.attr("value", sample.serial_number)
-												.text(sample.serial_number));
-							})
-                        },
-                        error: function(e){
-                            alert(e.responseText);
-                        }
-                    });
-                }
+				
+				if(($('#dateText').text()))
+				{				
+					if (result != ""){
+						$.ajax({
+							dataType: 'json',
+							url: 'getSerialNumb.php?station=' + result + '&start=' + startDate + '&end=' + endDate,
+							success: function(data){
+							$('.selectNumber').empty();
+								$(data).each(function(index, sample){
+									$('.selectNumber')
+										.append($("<option></option>")
+												.attr("value", sample.serial_number)
+													.text(sample.serial_number));
+								})
+							},
+							error: function(e){
+								alert(e.responseText);
+							}
+						});
+					}
+				}
             });
 			
 			$('button.sampleprobe').click(function(){
 				var correct = 0;
 				var data = {};
     			var selectedIndex = $('.selectStationChoice').val();
-				var selectedNumber = $('.selectNumber').val();
+				var selectedNumber = $('.selectNumber').val();		
+				
 				data.id_station = selectedIndex;
     			data.serial_number = selectedNumber;
-                    
                 data.id_trophic_characterization = $('.IDTrophicCharacterization').val();
                 data.id_horizon = $('.IDHorizon').val();
                 data.volume_of_filtered_water = $('.VolumeOfFilteredWaterProbe').val();
@@ -877,7 +807,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 					case 9:
 						alert("Введите корректно значение поля «Отношение хлорофилла A к C»"); correct = 0; break;	
 					case 10:
-						alert("Введите корректно значение поля «Номер»"); correct = 0; break;						
+						alert("Введите корректно значение поля «Номер»"); correct = 0; break;					
 				}
 			});
 			
