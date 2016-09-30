@@ -7,7 +7,8 @@ if ($area)
 {    
 	$q = "SELECT station.name, station.id_station
 		  FROM station 
-		  WHERE station.id_water_area = '$area'";
+		  WHERE station.id_water_area = '$area'
+          ORDER BY station.name ASC";
 	$result = pg_query ($cnn, $q);
 	$rows = array();
 	while($r = pg_fetch_assoc($result)) {
