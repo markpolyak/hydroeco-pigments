@@ -32,35 +32,35 @@ if(isset($_POST['sample']))
 	
 		if(empty($volume_of_filtered_water)) 
 		{
-			$volume_of_filtered_water = 0;
+			$volume_of_filtered_water = NULL;
 		}
 		if(empty($chlorophyll_a_concentration)) 
 		{
-			$chlorophyll_a_concentration = 0;
+			$chlorophyll_a_concentration = NULL;
 		}
 		if(empty($chlorophyll_b_concentration)) 
 		{
-			$chlorophyll_b_concentration = 0;
+			$chlorophyll_b_concentration = NULL;
 		}
 		if(empty($chlorophyll_c_concentration)) 
 		{
-			$chlorophyll_c_concentration = 0;
+			$chlorophyll_c_concentration = NULL;
 		}
 		if(empty($a)) 
 		{
-			$a = 0;
+			$a = NULL;
 		}
 		if(empty($pigment_index)) 
 		{
-			$pigment_index = 0;
+			$pigment_index = NULL;
 		}
 		if(empty($pheopigments)) 
 		{
-			$pheopigments = 0;
+			$pheopigments = NULL;
 		}
 		if(empty($ratio_of_cl_a_to_cl_c)) 
 		{
-			$ratio_of_cl_a_to_cl_c = 0;
+			$ratio_of_cl_a_to_cl_c = NULL;
 		}
 		if(empty($pigment_comment)) 
 		{
@@ -68,14 +68,17 @@ if(isset($_POST['sample']))
 		}
 		if(empty($pigment_serial_number)) 
 		{
-			$pigment_serial_number = 0;
+			$pigment_serial_number = NULL;
 		}
 		
         $query1 = pg_query($cnn, "SELECT max(id_photosynthetic_pigments_sample) FROM photosynthetic_pigments_samples");
         $row1 = pg_fetch_array($query1);
         $id_photosynthetic_pigments_sample = $row1['max'] + 1;
-        $query2 = pg_query($cnn, "INSERT INTO photosynthetic_pigments_samples VALUES ('$id_photosynthetic_pigments_sample', '$id_trophic_characterization', '$id_sample', '$id_horizon', '$volume_of_filtered_water', '$chlorophyll_a_concentration', '$chlorophyll_b_concentration', '$chlorophyll_c_concentration', '$a', '$pigment_index', '$pheopigments', '$ratio_of_cl_a_to_cl_c', '$pigment_comment', '$pigment_serial_number')");
-		http_response_code(200);
+        $query2 = pg_query_params($cnn, "INSERT INTO photosynthetic_pigments_samples 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", 
+		array ($id_photosynthetic_pigments_sample, $id_trophic_characterization, $id_sample, $id_horizon, $volume_of_filtered_water, 
+				$chlorophyll_a_concentration, $chlorophyll_b_concentration, $chlorophyll_c_concentration, $a, $pigment_index, 
+				$pheopigments, $ratio_of_cl_a_to_cl_c, $pigment_comment, $pigment_serial_number));
 }  
 else if(isset($_POST['ppsample']))
 {
@@ -99,35 +102,35 @@ else if(isset($_POST['ppsample']))
         
 		if(empty($volume_of_filtered_water)) 
 		{
-			$volume_of_filtered_water = 0;
+			$volume_of_filtered_water = NULL;
 		}
 		if(empty($chlorophyll_a_concentration)) 
 		{
-			$chlorophyll_a_concentration = 0;
+			$chlorophyll_a_concentration = NULL;
 		}
 		if(empty($chlorophyll_b_concentration)) 
 		{
-			$chlorophyll_b_concentration = 0;
+			$chlorophyll_b_concentration = NULL;
 		}
 		if(empty($chlorophyll_c_concentration)) 
 		{
-			$chlorophyll_c_concentration = 0;
+			$chlorophyll_c_concentration = NULL;
 		}
 		if(empty($a)) 
 		{
-			$a = 0;
+			$a = NULL;
 		}
 		if(empty($pigment_index)) 
 		{
-			$pigment_index = 0;
+			$pigment_index = NULL;
 		}
 		if(empty($pheopigments)) 
 		{
-			$pheopigments = 0;
+			$pheopigments = NULL;
 		}
 		if(empty($ratio_of_cl_a_to_cl_c)) 
 		{
-			$ratio_of_cl_a_to_cl_c = 0;
+			$ratio_of_cl_a_to_cl_c = NULL;
 		}
 		if(empty($pigment_comment)) 
 		{
@@ -135,7 +138,7 @@ else if(isset($_POST['ppsample']))
 		}
 		if(empty($pigment_serial_number)) 
 		{
-			$pigment_serial_number = 0;
+			$pigment_serial_number = NULL;
 		}
 		
 		$query = pg_query($cnn, "SELECT id_sample FROM samples WHERE id_station = '".$id_station."' AND serial_number = '".$serial_number."'");
@@ -145,7 +148,11 @@ else if(isset($_POST['ppsample']))
         $query1 = pg_query($cnn, "SELECT max(id_photosynthetic_pigments_sample) FROM photosynthetic_pigments_samples");
         $row1 = pg_fetch_array($query1);
         $id_photosynthetic_pigments_sample = $row1['max'] + 1;
-        $query2 = pg_query($cnn, "INSERT INTO photosynthetic_pigments_samples VALUES ('$id_photosynthetic_pigments_sample', '$id_trophic_characterization', '$id_sample', '$id_horizon', '$volume_of_filtered_water', '$chlorophyll_a_concentration', '$chlorophyll_b_concentration', '$chlorophyll_c_concentration', '$a', '$pigment_index', '$pheopigments', '$ratio_of_cl_a_to_cl_c', '$pigment_comment', '$pigment_serial_number')");
+		$query2 = pg_query_params($cnn, "INSERT INTO photosynthetic_pigments_samples 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)", 
+		array ($id_photosynthetic_pigments_sample, $id_trophic_characterization, $id_sample, $id_horizon, $volume_of_filtered_water, 
+				$chlorophyll_a_concentration, $chlorophyll_b_concentration, $chlorophyll_c_concentration, $a, $pigment_index, 
+				$pheopigments, $ratio_of_cl_a_to_cl_c, $pigment_comment, $pigment_serial_number));
 		http_response_code(200);
 }  
 else

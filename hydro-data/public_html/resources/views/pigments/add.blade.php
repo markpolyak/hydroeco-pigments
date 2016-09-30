@@ -255,7 +255,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                                                     <?php													
                                                     $query = pg_query($cnn, "SELECT * FROM trophic_characterization_of_water");
 													?>
-                                                    <select class="IDTrophicCharacterization form-control">                          
+                                                    <select class="IDTrophicCharacterization2 form-control">                          
                                                     <?php
                                                     while($row = pg_fetch_array($query))
                                                     {
@@ -273,7 +273,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                                                     <?php
                                                     $query = pg_query($cnn, "SELECT * FROM horizon_levels WHERE name IS NOT NULL");
                                                     ?>
-                                                    <select class="IDHorizon form-control">
+                                                    <select class="IDHorizon2 form-control">
                                                     <?php
                                                     while($row = pg_fetch_array($query))
                                                     {
@@ -518,7 +518,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.volume_of_filtered_water.length != 0)
 				{	
-					if(!($.isNumeric(data.volume_of_filtered_water)))
+					if(!($.isNumeric(data.volume_of_filtered_water)) || data.volume_of_filtered_water < 0)
 					{
 						correct = 4;
 					}
@@ -526,7 +526,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.chlorophyll_a_concentration.length != 0)
 				{
-					if(!($.isNumeric(data.chlorophyll_a_concentration)))
+					if(!($.isNumeric(data.chlorophyll_a_concentration)) || data.chlorophyll_a_concentration < 0)
 					{
 						correct = 5;
 					}
@@ -534,7 +534,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.chlorophyll_b_concentration.length != 0)
 				{
-					if(!($.isNumeric(data.chlorophyll_b_concentration)))
+					if(!($.isNumeric(data.chlorophyll_b_concentration)) || data.chlorophyll_b_concentration < 0)
 					{
 						correct = 6;
 					}
@@ -542,7 +542,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.chlorophyll_c_concentration.length != 0)
 				{
-					if(!($.isNumeric(data.chlorophyll_c_concentration)))
+					if(!($.isNumeric(data.chlorophyll_c_concentration)) || data.chlorophyll_c_concentration < 0)
 					{
 						correct = 7;
 					}
@@ -550,7 +550,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.pigment_index.length != 0)
 				{
-					if(!($.isNumeric(data.pigment_index)))
+					if(!($.isNumeric(data.pigment_index)) || data.pigment_index < 0)
 					{
 						correct = 8;
 					}
@@ -558,7 +558,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.a.length != 0)
 				{
-					if(!($.isNumeric(data.a)))
+					if(!($.isNumeric(data.a)) || data.a < 0)
 					{
 						correct = 9;
 					}
@@ -566,7 +566,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.pheopigments.length != 0)
 				{
-					if(!($.isNumeric(data.pheopigments)))
+					if(!($.isNumeric(data.pheopigments)) || data.pheopigments < 0)
 					{
 						correct = 10;
 					}
@@ -574,7 +574,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.ratio_of_cl_a_to_cl_c.length != 0)
 				{
-					if(!($.isNumeric(data.ratio_of_cl_a_to_cl_c)))
+					if(!($.isNumeric(data.ratio_of_cl_a_to_cl_c)) || data.ratio_of_cl_a_to_cl_c < 0)
 					{
 						correct = 11;
 					}
@@ -582,7 +582,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.pigment_serial_number.length != 0)
 				{
-					if(!($.isNumeric(data.pigment_serial_number)))
+					if(!($.isNumeric(data.pigment_serial_number)) || data.pigment_serial_number < 0)
 					{
 						correct = 12;
 					}
@@ -603,10 +603,15 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 							location.reload();
     					},
                         error: function(e){
-						    alert('Данные успешно добавлены!');
-							location.reload();
+							if (e.status == 200)
+							{
+								alert('Данные успешно добавлены!');
+								location.reload();
+							}
+							else
+								alert(e.responseText);
                         }
-					});
+					})
 				}
 				
 				switch(correct)
@@ -676,8 +681,8 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				data.id_station = selectedIndex;
     			data.serial_number = selectedNumber;
-                data.id_trophic_characterization = $('.IDTrophicCharacterization').val();
-                data.id_horizon = $('.IDHorizon').val();
+                data.id_trophic_characterization = $('.IDTrophicCharacterization2').val();
+                data.id_horizon = $('.IDHorizon2').val();
                 data.volume_of_filtered_water = $('.VolumeOfFilteredWaterProbe').val();
                 data.chlorophyll_a_concentration = $('.ChlorophyllAConcentrationProbe').val();
                 data.chlorophyll_b_concentration = $('.ChlorophyllBConcentrationProbe').val();
@@ -696,7 +701,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.volume_of_filtered_water.length != 0)
 				{	
-					if(!($.isNumeric(data.volume_of_filtered_water)))
+					if(!($.isNumeric(data.volume_of_filtered_water)) || data.volume_of_filtered_water < 0)
 					{
 						correct = 2;
 					}
@@ -704,7 +709,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.chlorophyll_a_concentration.length != 0)
 				{
-					if(!($.isNumeric(data.chlorophyll_a_concentration)))
+					if(!($.isNumeric(data.chlorophyll_a_concentration)) || data.chlorophyll_a_concentration < 0)
 					{
 						correct = 3;
 					}
@@ -712,7 +717,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.chlorophyll_b_concentration.length != 0)
 				{
-					if(!($.isNumeric(data.chlorophyll_b_concentration)))
+					if(!($.isNumeric(data.chlorophyll_b_concentration)) || data.chlorophyll_b_concentration < 0)
 					{
 						correct = 4;
 					}
@@ -720,7 +725,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.chlorophyll_c_concentration.length != 0)
 				{
-					if(!($.isNumeric(data.chlorophyll_c_concentration)))
+					if(!($.isNumeric(data.chlorophyll_c_concentration)) || data.chlorophyll_c_concentration < 0)
 					{
 						correct = 5;
 					}
@@ -728,7 +733,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.pigment_index.length != 0)
 				{
-					if(!($.isNumeric(data.pigment_index)))
+					if(!($.isNumeric(data.pigment_index)) || data.pigment_index < 0)
 					{
 						correct = 6;
 					}
@@ -736,7 +741,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.a.length != 0)
 				{
-					if(!($.isNumeric(data.a)))
+					if(!($.isNumeric(data.a)) || data.a < 0)
 					{
 						correct = 7;
 					}
@@ -744,7 +749,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.pheopigments.length != 0)
 				{
-					if(!($.isNumeric(data.pheopigments)))
+					if(!($.isNumeric(data.pheopigments)) || data.pheopigments < 0)
 					{
 						correct = 8;
 					}
@@ -752,7 +757,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.ratio_of_cl_a_to_cl_c.length != 0)
 				{
-					if(!($.isNumeric(data.ratio_of_cl_a_to_cl_c)))
+					if(!($.isNumeric(data.ratio_of_cl_a_to_cl_c)) || data.ratio_of_cl_a_to_cl_c < 0)
 					{
 						correct = 9;
 					}
@@ -760,7 +765,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				
 				if (data.pigment_serial_number.length != 0)
 				{
-					if(!($.isNumeric(data.pigment_serial_number)))
+					if(!($.isNumeric(data.pigment_serial_number)) || data.pigment_serial_number < 0)
 					{
 						correct = 10;
 					}
@@ -780,8 +785,13 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 								location.reload();
 							},
 							error: function(e){
+							if (e.status == 200)
+							{
 								alert('Данные успешно добавлены!');
 								location.reload();
+							}
+							else
+								alert(e.responseText);
 							}
 					});
 				}
