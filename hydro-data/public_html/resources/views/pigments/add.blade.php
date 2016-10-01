@@ -1,4 +1,4 @@
-@extends('app')
+﻿@extends('app')
 @section('content')
 
 <?php
@@ -63,7 +63,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                                                     <label class="font-normal">Дата отбора пробы</label>
                                                     <div class="input-group date date-sample">
                                                         <span class="input-group-addon"><i class="fa fa-calendar"></i><b class="glyphicon glyphicon-calendar"></b></span>
-                                                        <input type="text" data-date-format="MM/DD/YYYY" class="form-control" value="">
+                                                        <input type="text" class="form-control" value="">
                                                     </div>
                                                 </div>
 
@@ -403,6 +403,12 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 	
     <!-- Data picker -->
     <script src="js/plugins/datapicker/bootstrap-datepicker.js"></script>
+	  <script type="text/javascript" src="/bower_components/jquery/jquery.min.js"></script>
+	  <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+	  <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	  <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+	  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	  <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 
     <!-- Select2 -->
     <script src="js/plugins/select2/select2.full.min.js"></script>
@@ -416,7 +422,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
             var startDate = '';
             var endDate = '';
 			var selectArea = '';
-			
+			//Switching on the flag
             $('#pigmentInterface').click(function () {
                 if($('#pigmentInterface')[0].checked)
                 {
@@ -429,7 +435,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                     $('#pgInterfaceTwo').slideToggle();
                 }
             });
-						
+			//Selection of water area	first form
             $('.selectArea').change(function(){			
                 selectArea = $('.selectArea').val();
                 var result = selectArea;
@@ -452,7 +458,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                     });
                 }
             });
-			
+			//Selection of water area	second form
 			$('.selectAreaChoice').change(function(){
 				selectArea = $('.selectAreaChoice').val();
 
@@ -476,18 +482,16 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                     });
                 }
             });
-
+			//Adding to the first form
 			$('button.addsample').click(function(){
 				var correct = 0;
 				var data = {};
     			var selectedIndex = $('.selectStation').val();
-    			var date = $(".date-sample").datepicker("getDate").toJSON();
-				
+    			var date = $(".date-sample").datepicker("getDate"); 				
 				data.id_station = selectedIndex;
 				data.date = date;
 				data.comment = $('.comment-sample').val();
 				data.serial_number = $('.serial-sample').val();
-					
 				data.id_trophic_characterization = $('.IDTrophicCharacterization').val();
 				data.id_horizon = $('.IDHorizon').val();
 				data.volume_of_filtered_water = $('.VolumeOfFilteredWater').val();
@@ -500,7 +504,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 				data.ratio_of_cl_a_to_cl_c = $('.RatioOfChAToChC').val();
 				data.pigment_comment = $('.PigmentComment').val();
 				data.pigment_serial_number = $('.PigmentNumber').val();
-				
+
 				if(!(data.id_station > 0))
 				{
 					correct = 1;
@@ -642,7 +646,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 						alert("Введите корректно значение поля «Номер»"); correct = 0; break;							
 				}
 			});
-						
+			//Selection of station to the second form
 			$('.selectStationChoice').change(function(){
                 selectedStations = [];
                 $(".selectStationChoice option:selected").each(function(){selectedStations.push($(this).attr("value"));});
@@ -672,7 +676,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 					}
 				}
             });
-			
+			//Adding to the second form
 			$('button.sampleprobe').click(function(){
 				var correct = 0;
 				var data = {};
@@ -820,25 +824,31 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
 						alert("Введите корректно значение поля «Номер»"); correct = 0; break;					
 				}
 			});
-			
+			//Calendar to the first form
             $('.date-sample').datepicker({
-                todayBtn: "linked",
-                keyboardNavigation: true,
-                forceParse: false,
-                calendarWeeks: true,
-                autoclose: true
-            });
-			
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true,
+            format: "dd/mm/yyyy",
+			showDropdowns: false,
+            showWeekNumbers: true,
+            timePicker: false,
+
+            timePickerIncrement: 0		
+			});
+			//Selection all time on calendar to the second form
 			$('#allTime').click(function (){
                 $('#reportrange span').html('January 1, 1981' + ' - ' + moment().format('MMMM D, YYYY'));
             });
-
+			//Calendar to the second form
 			$('#reportrange').daterangepicker({
-                format: 'MM/DD/YYYY',
+                format: 'DD/MM/YYYY',
                 startDate: '01/01/1981',
-                endDate: moment().format('MM/DD/YYYY'),
+                endDate: moment().format('DD/MM/YYYY'),
                 minDate: '01/01/1981',
-                maxDate: moment().format('MM/DD/YYYY'),
+                maxDate: moment().format('DD/MM/YYYY'),
                 showDropdowns: true,
                 showWeekNumbers: true,
                 timePicker: false,
@@ -864,7 +874,7 @@ $cnn = pg_connect("host=pg.sweb.ru port=5432 dbname=mpolyakru_hbio user=mpolyakr
                     fromLabel: 'От',
                     toLabel: 'До',
                     customRangeLabel: 'Выбрать:',
-                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                    daysOfWeek: ['Mo', 'Tu', 'We', 'Th', 'Fr','Sa', 'Su'],
                     monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                     firstDay: 1
                 }

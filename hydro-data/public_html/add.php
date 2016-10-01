@@ -7,7 +7,7 @@ if(isset($_POST['sample']))
         $json = str_replace('\"', '"', $_POST['sample']);
     	$j = json_decode($json, true);
     	$id_station = $j['id_station'];
-    	$date = mb_strimwidth($j['date'], 0, 10);
+    	$date = $j['date'];
     	$comment = $j['comment'];
     	$serial_number = $j['serial_number'];
         
